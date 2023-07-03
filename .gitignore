@@ -11,7 +11,10 @@ node_modules
 .DS_Store
 dist
 *.local
-*/images
+*/__test__
+/src/static/images
+/src/pages/test
+
 
 # Editor directories and files
 .idea

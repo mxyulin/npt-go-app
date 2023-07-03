@@ -47,6 +47,12 @@
 			"style": {
 				"navigationBarTitleText": "练习结果"
 			}
+		},
+		{
+			"path": "pages/test/test",
+			"style": {
+				"navigationBarTitleText": "测试"
+			}
 		}
 	],
 	"globalStyle": {
