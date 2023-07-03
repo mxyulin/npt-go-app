@@ -1,0 +1,69 @@
+// 各种主题变量
+
+/* 颜色变量 */
+
+/* 行为相关颜色 */
+$v-color-primary: #2abfa5;
+$v-color-primary-light: #aaf9aa;
+
+$v-color-success: #4cd964;
+$v-color-warning: #f0ad4e;
+$v-color-warning-light: #ffd69e;
+$v-color-error: #dd524d;
+$v-color-error-light: #ff9d9a;
+
+/* 文字基本颜色 */
+$v-text-color: #333; // 基本色
+$v-text-color-inverse: #fff; // 反色
+$v-text-color-grey: #999; // 辅助灰色，如加载更多的提示信息
+$v-text-color-placeholder: #808080;
+$v-text-color-disable: #c0c0c0;
+
+/* 背景颜色 */
+$v-bg-color: #fff;
+$v-bg-color-grey: #f8f8f8;
+$v-bg-color-hover: #f1f1f1; // 点击状态颜色
+$v-bg-color-mask: rgba(0, 0, 0, 0.4); // 遮罩颜色
+
+/* 边框颜色 */
+$v-border-color: #c8c7cc;
+
+/* 尺寸变量 */
+
+/* 文字尺寸 */
+$v-font-size-sm: 12px;
+$v-font-size-base: 14px;
+$v-font-size-lg: 16;
+
+/* 图片尺寸 */
+$v-img-size-sm: 20px;
+$v-img-size-base: 26px;
+$v-img-size-lg: 40px;
+
+/* Border Radius */
+$v-border-radius-sm: 2px;
+$v-border-radius-base: 3px;
+$v-border-radius-md: 0.375rem;
+$v-border-radius-lg: 6px;
+$v-border-radius-circle: 50%;
+
+/* 水平间距 */
+$v-spacing-row-sm: 5px;
+$v-spacing-row-base: 10px;
+$v-spacing-row-lg: 15px;
+
+/* 垂直间距 */
+$v-spacing-col-sm: 4px;
+$v-spacing-col-base: 8px;
+$v-spacing-col-lg: 12px;
+
+/* 透明度 */
+$v-opacity-disabled: 0.3; // 组件禁用态的透明度
+
+/* 文章场景相关 */
+$v-color-title: #2c405a; // 文章标题颜色
+$v-font-size-title: 20px;
+$v-color-subtitle: #555; // 二级标题颜色
+$v-font-size-subtitle: 18px;
+$v-color-paragraph: #3f536e; // 文章段落颜色
+$v-font-size-paragraph: 15px;

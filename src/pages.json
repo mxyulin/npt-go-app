@@ -1,0 +1,76 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+		}
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "智能棋手"
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+		},
+		{
+			"path": "pages/levelsGame/levelsGame",
+			"style": {
+				"navigationBarTitleText": "级别练习"
+			}
+		},
+		{
+			"path": "pages/exerciseGame/exerciseGame",
+			"style": {
+				"navigationBarTitleText": "课程练习"
+			}
+		},
+		{
+			"path": "pages/courseLearn/courseLearn",
+			"style": {
+				"navigationBarTitleText": "知识课程"
+			}
+		},
+		{
+			"path": "pages/failureRecord/failureRecord",
+			"style": {
+				"navigationBarTitleText": "错题集"
+			}
+		},
+		{
+			"path": "pages/exerciseRecorde/exerciseRecorde",
+			"style": {
+				"navigationBarTitleText": "练习结果"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#333",
+		"borderStyle": "black",
+		"blurEffect": "dark",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/images/home1.png",
+			"selectedIconPath": "static/images/home.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/user/user",
+			"iconPath": "static/images/mine1.png",
+			"selectedIconPath": "static/images/mine.png",
+			"text": "我的"
+		}]
+	}
+}

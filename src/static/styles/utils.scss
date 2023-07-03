@@ -1,0 +1,62 @@
+.yulin-line-hidden {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@for $i from 2 to 9 {
+	.yulin-line-hidden-#{$i} {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: $i;
+		-webkit-box-orient: vertical;
+	}
+}
+
+.yulin-button-main {
+	padding: .5em 1em;
+	border: none;
+	color: $v-bg-color-grey;
+	background: linear-gradient(to top right, $v-color-primary-light, $v-color-primary);
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	border-radius: $v-border-radius-md;
+	-webkit-border-radius: $v-border-radius-md;
+	-moz-border-radius: $v-border-radius-md;
+	-ms-border-radius: $v-border-radius-md;
+	-o-border-radius: $v-border-radius-md;
+}
+
+.yulin-button-error {
+	padding: .5em 1em;
+	border: none;
+	color: $v-bg-color-grey;
+	background: linear-gradient(to top right, $v-color-error-light, $v-color-error);
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	border-radius: $v-border-radius-md;
+	-webkit-border-radius: $v-border-radius-md;
+	-moz-border-radius: $v-border-radius-md;
+	-ms-border-radius: $v-border-radius-md;
+	-o-border-radius: $v-border-radius-md;
+}
+
+.yulin-button-warning {
+	padding: .5em 1em;
+	border: none;
+	color: $v-bg-color-grey;
+	background: linear-gradient(to top right, $v-color-warning-light, $v-color-warning);
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	border-radius: $v-border-radius-md;
+	-webkit-border-radius: $v-border-radius-md;
+	-moz-border-radius: $v-border-radius-md;
+	-ms-border-radius: $v-border-radius-md;
+	-o-border-radius: $v-border-radius-md;
+}
+
+.box-shadow-main {
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.bg-test {
+	background: $v-color-primary;
+}
