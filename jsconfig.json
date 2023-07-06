@@ -3,5 +3,6 @@
     "types": [
       "@dcloudio/types"
     ],
+    "allowJs": true
   }
 }

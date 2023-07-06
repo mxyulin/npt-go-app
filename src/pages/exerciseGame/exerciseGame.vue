@@ -14,7 +14,7 @@
           <view class=" h-24 rounded-md flex flex-col justify-evenly items-center box-shadow-main"
             v-for="(val_lev2, idx_lev2) of val_lev1.value" :key="idx_lev2">
             <view class="">《{{ val_lev2.name }}》</view>
-            <view class="text-xs yulin-button-main" @click="useJumpTo('/pages/exerciseRecorde/exerciseRecorde')">
+            <view class="text-xs yulin-button-main" @click="useJumpTo('/pages/test/test')">
               开始
             </view>
           </view>
