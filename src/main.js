@@ -5,7 +5,7 @@ import {
 import App from "./App.vue";
 
 // 注册全局 log
-window.$log = function (msg, color = 'red', fontSize) {
+window.$clog = function (msg, color = 'red', fontSize) {
 	console.log(`%c ${msg}`, `color: ${color}; font-size: ${fontSize}`);
 }
 
