@@ -1,4 +1,4 @@
-import { checkEvenOdd } from "@/utils/tools";
+import { U_checkEvenOdd } from "@/utils/tools";
 // 不同棋盘的一半间隔宽
 let halfGap = {
   sm: 36,
@@ -25,10 +25,10 @@ function getCalibrationPosition(position_rpx, size) {
 
     // 计算点位的值
     if (size == 'md') {
-      position_rpx[idx] = (checkEvenOdd(num) == 'odd') ? (num * halfGap[size] + 28.5) : ((num - 1) * halfGap[size] + 28.5);
+      position_rpx[idx] = (U_checkEvenOdd(num) == 'odd') ? (num * halfGap[size] + 28.5) : ((num - 1) * halfGap[size] + 28.5);
     }
     else {
-      position_rpx[idx] = (checkEvenOdd(num) == 'odd') ? ((num + 1) * halfGap[size]) : (num * halfGap[size]);
+      position_rpx[idx] = (U_checkEvenOdd(num) == 'odd') ? ((num + 1) * halfGap[size]) : (num * halfGap[size]);
     }
   })
 

@@ -4,26 +4,30 @@
     <canvas style="width: 720rpx; height: 720rpx;" class="box-shadow-main rounded-md chessboard-bg"
       canvas-id="chessboard-go" />
     <canvas style="width: 720rpx; height: 720rpx; top: 15rpx;" class="rounded-md absolute bg-none" canvas-id="pieces-go"
-      @touchstart="onChessboardTouch" />
+      @touchstart="_onChessboardTouch" />
   </view>
-  <view class=" w-56 text-xs yulin-button-main" @tap="onGhostSelection">
-    落子
-  </view>
-  <view>上一步</view>
 </template>
 
 <script>
 import globalState from "@/mixins/globalState.js";
+import { useShowMessage } from "@/mixins/methods.js";
 import { checkDuplicates, checkSelectionArea, getCalibrationPosition } from "./calculatePoint.js";
 import { drawChessboard, drawPieces } from "./drawChessboard.js";
 export default {
   setup() {
-    const points_paly = ref([]);// 对战落子点位
-    let curHandsCountNum = ref(0);// 最新手数
+    let HandsCountTotal = ref(0);// 当前手数
+
+    let snapshots_game = ref([]);// 对战快照
+    const points_game = ref([]);// 当前对局落点数据
+    const points_ban = ref([{ position: [360, 360] }]);// 当前对局禁用落点数据
+
+
 
     return {
-      curHandsCountNum,
-      points_paly
+      HandsCountTotal,
+      snapshots_game,
+      points_game,
+      points_ban
     }
   },
 
@@ -33,13 +37,23 @@ export default {
       type: String,
       default: 'play'
     },
+    // 
+    currentColor: {
+      type: String,
+      default: 'black'
+    },
+    // 玩家黑先还是白后
+    playerColor: {
+      type: String,
+      default: 'black'
+    },
     // 棋盘规格
     size: {
       type: String,
       default: 'lg'
     },
     // 组件接收的点位数据
-    inputPoints: {
+    snapshots: {
       type: Array,
       default: []
     },
@@ -57,9 +71,16 @@ export default {
 
   computed: {
     // 对战复盘记录数据
-    points_record() {
-      // todo 转换成rpx比例坐标
-      return this.inputPoints
+    points_history() {
+      /**
+       * todo 转换成rpx比例坐标
+      */
+      return this.snapshots
+    },
+
+    // 总手数就是快照总数
+    HandsCountTotal() {
+      return this.snapshots_game.length;
     }
   },
 
@@ -70,10 +91,11 @@ export default {
   },
 
   methods: {
-    // 
-    onChessboardTouch(e) {
+    // 玩家落子
+    _onChessboardTouch(e) {
       // debugger;
-      if (this.model == 'record') return;// 检查模式
+      if (this.model == 'record') return;// 非对战模式玩家不可落子
+      if (this.currentColor != this.playerColor) return;// 非玩家回合玩家不可落子
 
       const ctx = uni.createCanvasContext('pieces-go');
       let touchPoint = [e.touches[0].x, e.touches[0].y];
@@ -83,52 +105,107 @@ export default {
       if (checkSelectionArea(position_rpx, this.size) == 'no') return;// 校验点位是否在可落点区域
 
       position_rpx = getCalibrationPosition(position_rpx, this.size);// 获取校准后的正确点位数据
-      if (checkDuplicates(this.points_paly, position_rpx)) return;// 点位查重
+      if (checkDuplicates(this.points_game, position_rpx)) return;// 点位查重
+      if (checkDuplicates(this.points_ban, position_rpx)) return useShowMessage('无气点位，禁止落子~');// 禁用点检查
 
-      this.addPoint(position_rpx);// 添加落子点位
+      this._addPoint(position_rpx);// 添加落子点位
 
-      drawPieces(ctx, this.points_paly, this.size, this.handsCount, this.curHandsCountNum);
+      drawPieces(ctx, this.points_game, this.size, this.handsCount, this.HandsCountTotal);
     },
-    
+
     // 添加落子点位
-    addPoint(position_rpx) {
+    _addPoint(position_rpx) {
       // 试下模式启用时
       if (this.tryPlay) {
-        let hasGhost = (this.points_paly.length > 0) ? (this.points_paly.at(-1).handsCountNum === -1) : false;// 是否有未落子幽灵棋
-        hasGhost && this.points_paly.pop();// 先删除原来的幽灵棋子
+        let len = this.points_game.length;
+        let hasGhost = (this.points_game.length > 0) ? (this.points_game[len - 1].handsCountNum === -1) : false;// 是否有未落子幽灵棋
+        hasGhost && this.points_game.pop();// 先删除原来的幽灵棋子
 
         // 再添加新位置的幽灵棋子
-        this.points_paly.push({
-          handsCountNum: -1,// -1 表示幽灵棋子。
-          position: position_rpx
+        this.points_game.push({
+          color: this.currentColor,
+          position: position_rpx,
+          handsCountNum: -1,// -1 表示幽灵棋子
         });
       }
       // 试下模式关闭时
       else {
-        this.curHandsCountNum += 1;
-        this.points_paly.push({
-          handsCountNum: this.curHandsCountNum,// 吃子功能需要步数的缓存。
-          position: position_rpx
+        this.HandsCountTotal += 1;
+        this.points_game.push({
+          color: this.currentColor,
+          position: position_rpx,
+          handsCountNum: this.HandsCountTotal,
         });
+
+        // todo 添加对局快照
       }
+    },
+
+    ////删除落子点位
+    _delPoint(strat, length) {
 
     },
-    
+
+    // 添加游戏快照
+    _addSnapshots(color, handsNum, position_rpx) {
+      this.snapshots_game.push({
+        selectionColor: color,
+        handsNum,
+        points: [...this.points_game, { position_rpx }]
+      })
+    },
+
+    // 删除手数快照
+    _delSnapshots(shot) {
+    },
+
     // 试下棋子落子
     onGhostSelection() {
       if (this.model != 'play') return;
-      if (this.points_paly.length < 1) return;
-      if (this.points_paly.at(-1).handsCountNum != -1) return;
+
+      let len = this.points_game.length;
+      if (len < 1) return;
+      if (this.points_game[len - 1].handsCountNum != -1) return;
 
       const ctx = uni.createCanvasContext('pieces-go');
-      this.points_paly.at(-1).handsCountNum = this.curHandsCountNum += 1;
+      this.points_game[len - 1].handsCountNum = this.HandsCountTotal += 1;
 
-      drawPieces(ctx, this.points_paly, this.size, this.handsCount, this.curHandsCountNum);
+      // todo 添加对局快照
+
+      drawPieces(ctx, this.points_game, this.size, this.handsCount, this.HandsCountTotal);
     },
 
-    // 吃子
+    /**
+     * todo 悔棋（待完善逻辑）
+     */
+    takeBack() {
+      if (this.model != 'play') return;
 
-    // 悔棋
+      let len = this.points_game.length;
+      if (this.points_game[len - 1].handsCountNum === -1) return useShowMessage('试下中，无法悔棋~');
+      if (len === 0) return useShowMessage('无法悔棋，请开始游戏~');
+      if (len === 1) return useShowMessage('无法悔棋，请等待对手回合结束~');
+
+      this.HandsCountTotal -= 2;// 手数减2
+      this.points_game.splice(-2, 2);// 删除最后两个棋子数据
+
+      const ctx = uni.createCanvasContext('pieces-go');
+      drawPieces(ctx, this.points_game, this.size, this.handsCount, this.HandsCountTotal);
+    },
+
+    // 
+    takeBackToLast() {
+      uni.showModal({
+        title: '我要悔棋',
+        cancelText: '算了',
+        confirmText: '没错',
+        success: (e) => {
+          if (e.confirm) {
+            this.takeBack();
+          }
+        }
+      })
+    },
   },
 
   mounted(e) {

@@ -1,5 +1,5 @@
 import globalState from "@/mixins/globalState.js";
-import { checkEvenOdd } from "@/utils/tools";
+import { U_checkEvenOdd } from "@/utils/tools";
 
 let rpx = globalState.rpx;
 // 不同棋盘的一半间隔宽
@@ -90,7 +90,7 @@ function drawPoint(ctx, center, raduis, color) {
  * @param {String} size 尺寸（sm, md, lg）
  */
 function drawChessboard(ctx, size) {
-  $clog('开始绘制棋盘', 'red', '2em');
+  console.log(`%c 开始绘制棋盘`, `color: red; font-size: 2em`);
 
   ctx.beginPath();// 开启绘制路径
 
@@ -147,7 +147,7 @@ function drawChessboard(ctx, size) {
   }
 
   ctx.draw();// 开始绘制
-  $clog('棋盘绘制完毕', 'yellow', '2em')
+  console.log(`%c 棋盘绘制完毕`, `color: yellow; font-size: 2em`);
 }
 
 /**
@@ -157,6 +157,7 @@ function drawChessboard(ctx, size) {
  * @param {*} size 
  */
 function drawPieces(ctx, points, size, isHandsCount, curHandsCountNum) {
+  let len = points.length;
   points.forEach((point, idx, points) => {
     let { position, handsCountNum } = point;
 
@@ -173,7 +174,7 @@ function drawPieces(ctx, points, size, isHandsCount, curHandsCountNum) {
     ctx.fill();
 
     // 绘制指示器（和手数）
-    let fontColor = (checkEvenOdd(curHandsCountNum) == 'odd') ? 'white' : 'black';// 手数文字和棋子颜色相反
+    let fontColor = (U_checkEvenOdd(curHandsCountNum) == 'odd') ? 'white' : 'black';// 手数文字和棋子颜色相反
     // 绘制指示器 --- 非试下
     if (handsCountNum === (points.length) && isHandsCount) {
       let curPoint = {
@@ -187,14 +188,14 @@ function drawPieces(ctx, points, size, isHandsCount, curHandsCountNum) {
     if (handsCountNum === -1 && points.length > 1 && isHandsCount) {
       // 倒数第二个是非幽灵棋子
       let lastPoint = {
-        x: [...points].at(-2).position[0] * rpx,
-        y: [...points].at(-2).position[1] * rpx
+        x: [...points][len - 2].position[0] * rpx,
+        y: [...points][len - 2].position[1] * rpx
       };
-      drawNumIndicator([...points].at(-2).handsCountNum, lastPoint, fontColor);
+      drawNumIndicator([...points][len - 2].handsCountNum, lastPoint, fontColor);
     }
   });
 
-  $clog(`当前落子：${points.at(-1) ? points.at(-1).position : '空'}`, 'pink', '2em');
+  console.log(`%c 当前落子：${points[len - 1] ? points[len - 1].position : '空'}`, `color: pink; font-size: 2em`);
   ctx.draw();
 
   //* helper func --- 手数指示器
@@ -218,25 +219,25 @@ function drawPieces(ctx, points, size, isHandsCount, curHandsCountNum) {
   function setFillColor(gradientStart, gradientEnd, handsCountNum, curHandsCountNum) {
     let grd = null;
     // 普通黑棋
-    if (checkEvenOdd(handsCountNum) == 'odd' && handsCountNum > 0) {
+    if (U_checkEvenOdd(handsCountNum) == 'odd' && handsCountNum > 0) {
       grd = ctx.createLinearGradient(gradientStart.x, gradientStart.y, gradientEnd.x, gradientEnd.y);
       grd.addColorStop(0, "rgb(165, 165, 165)");
       grd.addColorStop(1, "rgb(0, 0, 0)");
     }
     // 普通白棋
-    else if (checkEvenOdd(handsCountNum) != 'odd' && handsCountNum > 0) {
+    else if (U_checkEvenOdd(handsCountNum) != 'odd' && handsCountNum > 0) {
       grd = ctx.createLinearGradient(gradientEnd.x, gradientEnd.y, gradientStart.x, gradientStart.y);
       grd.addColorStop(0, "rgb(165, 165, 165)");
       grd.addColorStop(1, "rgb(255, 255, 255)");
     }
     // 幽灵白棋
-    else if (handsCountNum == -1 && checkEvenOdd(curHandsCountNum) == 'odd') {
+    else if (handsCountNum == -1 && U_checkEvenOdd(curHandsCountNum) == 'odd') {
       grd = ctx.createLinearGradient(gradientEnd.x, gradientEnd.y, gradientStart.x, gradientStart.y);
       grd.addColorStop(0, "rgba(165, 165, 165, 0.7)");
       grd.addColorStop(1, "rgba(255, 255, 255, 0.7)");
     }
     // 幽灵黑棋
-    else if (handsCountNum == -1 && checkEvenOdd(curHandsCountNum) != 'odd') {
+    else if (handsCountNum == -1 && U_checkEvenOdd(curHandsCountNum) != 'odd') {
       grd = ctx.createLinearGradient(gradientStart.x, gradientStart.y, gradientEnd.x, gradientEnd.y);
       grd.addColorStop(0, "rgba(165, 165, 165, 0.7)");
       grd.addColorStop(1, "rgba(0, 0, 0, 0.7)");
