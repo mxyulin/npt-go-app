@@ -11,7 +11,7 @@ function useShowMessage(msg) {
   })
 }
 
-function useJumpTo(route, msg){
+function useJumpTo(route, msg) {
   // debugger;
   let url = unref(route);
 
@@ -26,7 +26,24 @@ function useJumpTo(route, msg){
   })
 }
 
+async function useShowLoading(msg, timing = 1000) {
+  return new Promise((resolve, reject) => {
+    uni.showLoading({
+      title: msg,
+      mask: true,
+      success: () => {
+        let timer = setTimeout(() => {
+          resolve('ok');
+          clearTimeout(timer);
+          uni.hideLoading();
+        }, timing)
+      }
+    })
+  })
+
+}
+
 export {
-  useJumpTo, useShowMessage
+  useJumpTo, useShowLoading, useShowMessage
 };
 
