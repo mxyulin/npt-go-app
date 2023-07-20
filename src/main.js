@@ -4,10 +4,7 @@ import {
 } from "vue";
 import App from "./App.vue";
 
-// 注册全局 log
-window.$clog = function (msg, color = 'red', fontSize) {
-	console.log(`%c ${msg}`, `color: ${color}; font-size: ${fontSize}`);
-}
+// import '@/mock/socket/server_ws'; // socket 服务器启动！
 
 // #ifdef VUE3
 export function createApp() {
