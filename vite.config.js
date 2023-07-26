@@ -42,7 +42,7 @@ export default defineConfig({
         require('tailwindcss'),// 安装 tailwindcss
         require('autoprefixer')// 安装 autoprefixer
       ],
-      devSourcemap: true
+      devSourcemap: false
     }
   },
   resolve: {

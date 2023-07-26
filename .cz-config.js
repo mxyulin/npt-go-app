@@ -55,6 +55,6 @@ module.exports = {
     confirmCommit: '确认要使用以上信息提交？(y/n)'
   },
 
-  // 默认长度72
+  // 主题字数限制 72
   subjectLimit: 72
 }
