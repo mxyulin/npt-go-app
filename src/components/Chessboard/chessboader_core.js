@@ -10,7 +10,7 @@ const halfGaps = {
 }
 
 /**
- * 获取用户输入的预期落点
+ * 获取用户点触的预期落点
  * @param {Array} pos 原始落点数据
  * @param {Strign} size 棋盘规格尺寸
  * @returns 
@@ -88,9 +88,8 @@ function checkSelection(pos, size) {
  * @returns 
  */
 function checkDuplicates(prePits_pos, curPit_pos) {
-
-  // debugger;
   let isExist = prePits_pos.some(pos => {
+    // debugger;
     return (curPit_pos.x === pos.x && curPit_pos.y === pos.y);
   })
 
@@ -103,3 +102,4 @@ function checkBanPos() { }
 export {
   checkDuplicates, checkSelection, getDesiredPos_touch
 };
+
