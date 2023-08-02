@@ -1,3 +1,8 @@
+/**
+ * 测试 websocket 接口
+ * @param {String} url 
+ * @param {Array} msgs 
+ */
 function test_webSocket(url, msgs) {
   let socketOpen = false;
 
@@ -32,7 +37,34 @@ function test_webSocket(url, msgs) {
   }
 }
 
+/*  */
+function test_getAutoPos(size) {
+  const canSelectionArea = {
+    '9X9': {
+      min: 36,
+      max: 684
+    },
+    '13X13': {
+      min: 28.5,
+      max: 691.5
+    },
+    '15X15': {
+      min: 22.5,
+      max: 697.5
+    },
+    '19X19': {
+      min: 18,
+      max: 702
+    },
+  };
+
+  return {
+    x: Math.round(Math.random() * (canSelectionArea[size].max - canSelectionArea[size].min) + canSelectionArea[size].min),
+    y: Math.round(Math.random() * (canSelectionArea[size].max - canSelectionArea[size].min) + canSelectionArea[size].min)
+  }
+}
+
 export {
-  test_webSocket
+  test_getAutoPos, test_webSocket
 };
 
