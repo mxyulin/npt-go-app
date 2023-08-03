@@ -64,75 +64,84 @@ class ChessborderDrawer {
    * @param {Object} ctx_pieces 棋子画布图层
    * @param {String} size 棋盘尺寸
    */
-  constructor(ctx_chessboader, ctx_pieces, size = '19X19') {
+  constructor(ctx_chessboader, ctx_pieces, size = '19X19', handsCount = true) {
     ChessborderDrawer.checkCanvasContext(ctx_chessboader);
     ChessborderDrawer.checkCanvasContext(ctx_pieces);
 
-    this.ctx_chessboader = ctx_chessboader;
-    this.ctx_pieces = ctx_pieces;
-    this.size = size;
+    this.#ctx_chessboader = ctx_chessboader;// 棋盘画布图层
+    this.#ctx_pieces = ctx_pieces;// 棋子画布图层
+    this.#stars = allStars[size];// 星位和天元
+    this.#halfGap = halfGaps[size];// 半间距
+    this.#borderSize = borderSizes[size];// 边框尺寸
 
-    this._stars = allStars[size];// 星位和天元
-    this._halfGap = halfGaps[size];// 半间距
-    this._borderSize = borderSizes[size];// 边框尺寸
+    this.setSize(size);
+    this.setHandsCount(handsCount);
   }
 
+  _size = '19X19';// 棋盘尺寸
   _handsCount = true;// 启用手数
-  _curHandsPoints = [];// 当前回合（手）点位数据
+  _points = [];// 当前回合（手）点位数据
 
   #borderWidth = 5 * rpx;
   #lineWidth = 1 * rpx;
   #lineGapStyle = 'round';// 线段端点样式
   #lineJoinStyle = 'round';// 线段交点样式
   #lineColor = '#ae7f53';// 网格线颜色
+  #ctx_chessboader = null;
+  #ctx_pieces = null;
+  #stars = null;
+  #halfGap = null;
+  #borderSize = null;
 
   drawChessboard() {
-    this.#drawRect(this.ctx_chessboader, this._borderSize.x, this._borderSize.y, this._borderSize.width);// 绘制棋盘边框
+    this.#drawRect(this.#ctx_chessboader, this.#borderSize.x, this.#borderSize.y, this.#borderSize.width);// 绘制棋盘边框
 
     // 绘制棋盘网格线
-    switch (this.size) {
+    switch (this._size) {
       case '9X9':
         for (let x = 144, y = 144; x < 648; x += 72, y += 72) {
-          this.#drawLine(this.ctx_chessboader, { x, y: 72 }, { x, y: 648 });
-          this.#drawLine(this.ctx_chessboader, { x: 72, y }, { x: 648, y });
+          this.#drawLine(this.#ctx_chessboader, { x, y: 72 }, { x, y: 648 });
+          this.#drawLine(this.#ctx_chessboader, { x: 72, y }, { x: 648, y });
         }
         break;
       case '13X13':
         for (let x = 105, y = 105; x < 666; x += 51, y += 51) {
-          this.#drawLine(this.ctx_chessboader, { x, y: 54 }, { x, y: 666 });
-          this.#drawLine(this.ctx_chessboader, { x: 54, y }, { x: 666, y });
+          this.#drawLine(this.#ctx_chessboader, { x, y: 54 }, { x, y: 666 });
+          this.#drawLine(this.#ctx_chessboader, { x: 54, y }, { x: 666, y });
         }
         break;
       case '15X15':
         for (let x = 90, y = 90; x < 675; x += 45, y += 45) {
-          this.#drawLine(this.ctx_chessboader, { x, y: 45 }, { x, y: 675 });
-          this.#drawLine(this.ctx_chessboader, { x: 45, y }, { x: 675, y });
+          this.#drawLine(this.#ctx_chessboader, { x, y: 45 }, { x, y: 675 });
+          this.#drawLine(this.#ctx_chessboader, { x: 45, y }, { x: 675, y });
         }
         break;
       case '19X19':
         for (let x = 72, y = 72; x < 684; x += 36, y += 36) {
-          this.#drawLine(this.ctx_chessboader, { x, y: 36 }, { x, y: 684 });
-          this.#drawLine(this.ctx_chessboader, { x: 36, y }, { x: 684, y });
+          this.#drawLine(this.#ctx_chessboader, { x, y: 36 }, { x, y: 684 });
+          this.#drawLine(this.#ctx_chessboader, { x: 36, y }, { x: 684, y });
         }
         break;
     }
 
     // 绘制星位和天元
-    this._stars.forEach(star => {
-      this.#drawPoint(this.ctx_chessboader, star, 6, this.#lineColor);
+    this.#stars.forEach(star => {
+      this.#drawPoint(this.#ctx_chessboader, star, 6, this.#lineColor);
     })
 
-    this.ctx_chessboader.draw();
+    this.#ctx_chessboader.draw();
   }
   drawPieces() {
-    this._curHandsPoints.forEach((pit, idx, arr) => {
+    this._points.forEach((pit, idx, arr) => {
       const { position, color, handsNum } = pit;
 
-      let grdStart = { x: position.x - this._halfGap, y: position.y - this._halfGap }
-      let grdEnd = { x: position.x + this._halfGap, y: position.y + this._halfGap }
+      if (position == null) return;// 停一手
+
+      let grdStart = { x: position.x - this.#halfGap, y: position.y - this.#halfGap }
+      let grdEnd = { x: position.x + this.#halfGap, y: position.y + this.#halfGap }
       let fillColor = piecesColors[color];
-      const grdColor = this.#setFillGrdColor(this.ctx_pieces, grdStart, grdEnd, fillColor);
-      this.#drawPoint(this.ctx_pieces, position, this._halfGap - 2, grdColor);
+      const grdColor = this.#setFillGrdColor(this.#ctx_pieces, grdStart, grdEnd, fillColor);
+      this.#drawPoint(this.#ctx_pieces, position, this.#halfGap - 2, grdColor);
 
       let len = arr.length;
 
@@ -143,12 +152,12 @@ class ChessborderDrawer {
           let trueLastPoint = arr[len - 2];
           let { position, handsNum, color } = trueLastPoint;
           let fontColor = color == 'black' ? 'white' : 'black';
-          this.#drawText(this.ctx_pieces, position.x, position.y + this._halfGap / 3, handsNum, fontColor)
+          this.#drawText(this.#ctx_pieces, position.x, position.y + this.#halfGap / 3, handsNum, fontColor)
         }
         // 非试下
         else if (idx === (len - 1)) {
           let fontColor = color == 'black' ? 'white' : 'black';
-          this.#drawText(this.ctx_pieces, position.x, position.y + this._halfGap / 3, handsNum, fontColor);
+          this.#drawText(this.#ctx_pieces, position.x, position.y + this.#halfGap / 3, handsNum, fontColor);
         }
       }
 
@@ -157,25 +166,31 @@ class ChessborderDrawer {
       if (handsNum === -1 && len > 1) {
         let trueLastPoint = arr[len - 2];
         let { position } = trueLastPoint;
-        this.#drawCircle(this.ctx_pieces, position, this._halfGap, 3, 'red')
+        this.#drawCircle(this.#ctx_pieces, position, this.#halfGap, 3, 'red')
       }
       // 非试下
       else if (idx === (len - 1)) {
-        this.#drawCircle(this.ctx_pieces, position, this._halfGap, 3, 'red');
+        this.#drawCircle(this.#ctx_pieces, position, this.#halfGap, 3, 'red');
       }
     })
 
-    this.ctx_pieces.draw();
+    this.#ctx_pieces.draw();
   }
 
   // getcurHandsPoints() { }
-  setcurHandsPoints(points) {
-    ChessborderDrawer.checkPoints(points)
-    this._curHandsPoints = points;
+  setPoints(val) {
+    ChessborderDrawer.checkPoints(val)
+    this._points = val;
   }
-  setHandsCount(state) {
-    if (Object.prototype.toString.call(state) != '[object Boolean]') return;
-    this._handsCount = state;
+  setHandsCount(val) {
+    if (Object.prototype.toString.call(val) != '[object Boolean]') return;
+    this._handsCount = val;
+  }
+  setSize(val) {
+    let isExist = ChessborderDrawer.checkSize(val);
+    if (isExist) {
+      this._size = val;
+    }
   }
 
   /**
@@ -239,7 +254,7 @@ class ChessborderDrawer {
 
     ctx.setFillStyle(fontColor);
     ctx.setTextAlign('center');
-    ctx.setFontSize(this._halfGap * rpx);
+    ctx.setFontSize(this.#halfGap * rpx);
 
     ctx.fillText(text, x * rpx, y * rpx);
   }
@@ -292,6 +307,10 @@ class ChessborderDrawer {
         throw new Error(`The element ${idx} of points is error.`)
       }
     })
+  }
+  static checkSize(val) {
+    let chessboardSizes = ['9X9', '13X13', '15X15', '19X19'];
+    return chessboardSizes.some(csz => csz == val);
   }
 }
 
