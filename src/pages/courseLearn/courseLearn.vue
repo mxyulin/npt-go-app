@@ -31,9 +31,8 @@
 </template>
 
 <script setup>
-import VipLabel from '@/components/VipLabel/VipLabel';
+import VipLabel from '@/components/VIP_Label/VIP_Label';
 import globalState from '@/mixins/globalState.js';
-import { reactive } from 'vue';
 
 const levels = reactive([
   {
