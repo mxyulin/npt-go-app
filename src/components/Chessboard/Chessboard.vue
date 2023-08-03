@@ -35,7 +35,7 @@ export default {
       type: Array,
       default: []
     },
-    // 启用手数
+    // 启用手数（默认启动）
     handsCount: {
       type: Boolean,
       default: true
@@ -48,19 +48,20 @@ export default {
   },
 
   computed: {
-    _points() {
-      return this.points;
-    }
   },
 
   watch: {
-    _points: {
+    points: {
       immediate: false,
       deep: true,
       handler(cur, pre) {
-        this.chessboader.setcurHandsPoints(cur);
+        this.chessboader.setPoints(cur);
         this.chessboader.drawPieces();
       }
+    },
+    handsCount(cur, pre) {
+      this.chessboader.setHandsCount(cur);
+      this.chessboader.drawPieces();
     }
   },
 
@@ -79,9 +80,9 @@ export default {
   mounted(e) {
     const ctx_chessBoader = uni.createCanvasContext('canvas-chessboard');
     const ctx_pieces = uni.createCanvasContext('canvas-pieces');
-    this.chessboader = new ChessborderDrawer(ctx_chessBoader, ctx_pieces, this.size);
+    this.chessboader = new ChessborderDrawer(ctx_chessBoader, ctx_pieces, this.size, this.handsCount);
     this.chessboader.drawChessboard();
-    this.chessboader.setcurHandsPoints(this._points);
+    this.chessboader.setPoints(this.points);
     this.chessboader.drawPieces();
   }
 }
