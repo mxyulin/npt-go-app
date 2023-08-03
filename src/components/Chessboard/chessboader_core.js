@@ -1,7 +1,5 @@
-import globalState from "@/mixins/globalState.js";
 import { tools_checkEvenOdd } from '@/utils/tools';
 
-const rpx = globalState.rpx;
 const halfGaps = {
   '9X9': 36,
   '13X13': 25.5,
