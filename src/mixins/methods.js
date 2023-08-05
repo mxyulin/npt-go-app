@@ -6,7 +6,7 @@ function useShowMessage(msg) {
   uni.showToast({
     title,
     icon: 'none',
-    mask: true,
+    mask: false,
     duration: 3000
   })
 }
