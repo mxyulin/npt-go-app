@@ -63,35 +63,37 @@ function checkSelection(pos, size) {
       min: 18,
       max: 702
     },
-  };
+  };// 可落子区域坐标值
   let { x, y } = pos;
 
-  // 判定落点是否超出允许的范围
-  let isOutside_x = x < canSelectionArea[size].min || x > canSelectionArea[size].max;
-  let isOutside_y = y < canSelectionArea[size].min || y > canSelectionArea[size].max;
-  // 判定落点是否位于点位正中间
-  let isMid_x = (size == '13X13') ? ((x - 28.5) % halfGaps['13X13'] === 0) : (x % halfGaps[size] === 0);
-  let isMid_y = (size == '13X13') ? ((y - 28.5) % halfGaps['13X13'] === 0) : (y % halfGaps[size] === 0);
-
-  if (isOutside_x || isOutside_y || isMid_x || isMid_y) {
+  if (isOutSide(x) || isOutSide(y) || isMid(x) || isMid(y)) {
     return false;
   }
   return true;
+
+  // 判断坐标值是否超出可落子区域
+  function isOutSide(val) {
+    return  val < canSelectionArea[size].min || val > canSelectionArea[size].max; 
+  }
+  // 判断坐标值是否在两点中央
+  function isMid(val) {
+    if (val <= canSelectionArea[size].min || val >= canSelectionArea[size].max) return false;// 坐标在可落子区域坐标值上或者之外范围外的肯定不属于两点中央坐标
+    val = val - canSelectionArea[size].min;// 以可落子区域坐标值作为起始的坐标值
+    return val % (2 * halfGaps[size]) === 0;// 坐标值等于两个 halfGap 的肯定是两点中央坐标
+  }
 }
 
 /**
  * 落点查重
- * @param {Array} prePits_pos 已落点数据
- * @param {Object} curPit_pos 新落点数据
+ * @param {Array} prePointsPos 本局对弈已落点
+ * @param {Object} curPointPos 新的落点
  * @returns 
  */
-function checkDuplicates(prePits_pos, curPit_pos) {
-  let isExist = prePits_pos.some(pos => {
-    // debugger;
-    return (curPit_pos.x === pos.x && curPit_pos.y === pos.y);
+function checkDuplicates(prePointsPos, curPointPos) {
+  // debugger;
+  return prePointsPos.some(pos => {
+    return curPointPos.x === pos.x && curPointPos.y === pos.y;
   })
-
-  return isExist;
 }
 
 // todo 检查禁用点位
