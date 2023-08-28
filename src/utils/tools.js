@@ -25,7 +25,7 @@ function tools_debounce(func, wait, immediate) {
 
   return function () {
     const context = this, // 保存 this 的值
-       args = arguments; // 保存函数的参数
+      args = arguments; // 保存函数的参数
 
     const later = function () { // 定义一个函数，用于在 wait 时间后执行 func 函数
       timeout = null; // 清空定时器的 ID
@@ -63,5 +63,11 @@ function tools_throttle(func, wait) {
   };
 }
 
-export { tools_checkEvenOdd, tools_debounce, tools_throttle };
+/**
+ * 判断请求路径
+ * @param {String} url 
+ * @returns 
+ */
+const tool_isURL = (url) => /(http|https):\/\/([\w.]+\/?)\S*/.test(url);
 
+export { tool_isURL, tools_checkEvenOdd, tools_debounce, tools_throttle };
