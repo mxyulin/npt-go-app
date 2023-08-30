@@ -1,11 +1,11 @@
+// https://vitejs.dev/config/
 import uni from '@dcloudio/vite-plugin-uni';
 import dns from 'dns';
-import AutoImport from 'unplugin-auto-import/vite'; // 自动按需引入 API
+import AutoImport from 'unplugin-auto-import/vite'; // 自动按需引入 API 插件
 import { VantResolver } from 'unplugin-vue-components/resolvers'; // vant-UI 插件配置
-import Components from 'unplugin-vue-components/vite'; // 自动引入组件
+import Components from 'unplugin-vue-components/vite'; // 自动引入并注册组件插件
 import { defineConfig } from 'vite';
 import { viteMockServe } from 'vite-plugin-mock'; // mock 服务器
-// https://vitejs.dev/config/
 
 dns.setDefaultResultOrder('verbatim');// 禁用 DNS 解析地址重新排序
 
@@ -13,14 +13,14 @@ export default defineConfig({
   plugins: [
     uni(),
     AutoImport({
-      imports: ['vue', 'uni-app'],
-      dts: 'src/auto-import.d.ts',// auto-import.d.ts生成的位置
+      imports: ['vue', 'uni-app'],// 自动引入 vue3 和 uni-app 的所有 API
+      dts: 'src/auto-import.d.ts',// auto-import.d.ts 生成的位置
       eslintrc: {
         enabled: true// 自动生成'eslintrc-auto-import.json'文件，在'.eslintrc.cjs'的'extends'中引入解决报错
       }
     }),
     Components({
-      resolvers: [VantResolver()],
+      resolvers: [VantResolver()],// 自动引入 vant 组件
     }),
     viteMockServe({
       mockPath: 'mock',
@@ -30,17 +30,18 @@ export default defineConfig({
     })
   ],
   css: {
-    // 预编译器
+    // * 预编译器配置
     preprocessorOptions: {
       scss: {
-        additionalData: ``,// 全局注入样式
+        // additionalData: ``,// 注入全局样式
       },
     },
-    // *该项配置会覆盖 postcss.config.js 的配置
+    // 该项配置会覆盖 postcss.config.js 的配置
     postcss: {
       plugins: [
-        require('tailwindcss'),// 安装 tailwindcss
-        require('autoprefixer')// 安装 autoprefixer
+        require('postcss-import'),
+        require('tailwindcss'),
+        require('autoprefixer')
       ],
       devSourcemap: false
     }
@@ -58,9 +59,11 @@ export default defineConfig({
       }
     ]
   },
-  // 全局依赖
-  transpileDependencies: [],
-  // 代理服务器
+
+  // *全局依赖
+  // transpileDependencies: [],
+  
+  // *代理服务器
   server: {
     host: 'localhost',
     port: 8000,
