@@ -1,5 +1,4 @@
 <script>
-// import { ref } from 'vue';
 
 export default {
   setup: function () {
@@ -27,6 +26,5 @@ export default {
 </script>
 
 <style lang="scss">
-/*每个页面公共css */
-@import "@/uni.scss"; // 主样式表
+@import "@/static/styles/theme.scss";// 主题变量
 </style>
