@@ -3,9 +3,9 @@ export default {
 
   // * 配置 tailwindcss 生效源(路径)
   content: [
+    './src/App.vue',
     './src/pages/**/*',
     './src/components/**/*',
-    './src/App.vue',
   ],
 
   // * 自定义 tailwindcss 主题内容
