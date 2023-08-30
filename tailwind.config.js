@@ -1,14 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
+
+  // * 配置 tailwindcss 生效源(路径)
   content: [
-    "./index.html",
-    "./src/**/*.{vue, js}",
+    './src/pages/**/*',
+    './src/components/**/*',
+    './src/App.vue',
   ],
-  theme: {
-    colors: {},
-    fontFamily: {},
-    extend: {},
-    borderRadius: {}
-  },
+
+  // * 自定义 tailwindcss 主题内容
+  theme: {},
+
+  // * 用各种辅助函数，或者使用官方和第三方插件扩充扩充 tailwindcss 样式
   plugins: [],
 }
